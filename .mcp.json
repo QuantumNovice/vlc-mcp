@@ -1,5 +1,5 @@
 {
   "mcpServers": {
-    "vlc": { "command": "npx", "args": ["-y", "vlc-mcp-server"] }
+    "vlc": { "command": "npx", "args": ["-y", "vlc-mcp-server@0.1.2"] }
   }
 }
