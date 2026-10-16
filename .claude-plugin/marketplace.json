@@ -1,0 +1,11 @@
+{
+  "name": "vlc-mcp",
+  "owner": { "name": "QuantumNovice" },
+  "plugins": [
+    {
+      "name": "vlc-mcp",
+      "source": "./",
+      "description": "Control VLC Media Player through the Model Context Protocol."
+    }
+  ]
+}

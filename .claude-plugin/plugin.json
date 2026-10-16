@@ -1,0 +1,8 @@
+{
+  "name": "vlc-mcp",
+  "version": "0.1.2",
+  "description": "Control VLC Media Player through the Model Context Protocol.",
+  "author": { "name": "QuantumNovice" },
+  "repository": "https://github.com/QuantumNovice/vlc-mcp",
+  "license": "MIT"
+}

@@ -7,3 +7,5 @@ npm-debug.log*
 task.md
 .*
 *.exe
+!.claude-plugin/
+!.mcp.json

@@ -81,6 +81,13 @@ Try these prompts:
 
 To play a specific item, first ask for the playlist, then pass the item's numeric ID to `vlc_play`. `vlc_add_media` accepts a local path or a URL that VLC supports. VLC needs permission to read the file or access the URL.
 
+## Install as a Claude Code plugin
+
+```
+/plugin marketplace add QuantumNovice/vlc-mcp
+/plugin install vlc-mcp --marketplace QuantumNovice/vlc-mcp
+```
+
 ## Connect from Claude Desktop
 
 Claude Desktop can launch the package over stdio. Open `%APPDATA%\Claude\claude_desktop_config.json` (create it if needed) and add this under `mcpServers`:
