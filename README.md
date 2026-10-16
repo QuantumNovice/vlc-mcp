@@ -270,6 +270,19 @@ npm run build
 
 Run the built server with `npm start`. It waits for an MCP client on standard input/output. The MCP protocol uses stdout; the server does not write application logs to stdout.
 
+## MCP Registry publishing
+
+This repository includes `server.json` and the matching `mcpName` field in `package.json` for the official MCP Registry. The Registry lists MCP servers and is distinct from GitHub Marketplace, which publishes GitHub Apps and Actions. To submit this server to the MCP Registry, publish the npm package and GitHub repository first, then authenticate and publish with the official CLI:
+
+```sh
+npm publish --access public
+mcp-publisher login github
+mcp-publisher validate
+mcp-publisher publish
+```
+
+The Registry namespace in `server.json` and `package.json` is `io.github.QuantumNovice/vlc-mcp`. Create the GitHub repository at the configured URL before publishing; registry publication requires GitHub authentication for the account that controls this namespace.
+
 ## Security notes
 
 - Keep VLC's HTTP interface bound to localhost. VLC's HTTP interface does not provide transport encryption, so do not expose it directly to an untrusted network. If you configure a password, use a strong one.

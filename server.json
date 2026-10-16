@@ -1,0 +1,44 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.QuantumNovice/vlc-mcp",
+  "description": "Control VLC Media Player through MCP tools.",
+  "title": "VLC Media Player",
+  "repository": {
+    "url": "https://github.com/QuantumNovice/vlc-mcp",
+    "source": "github"
+  },
+  "version": "0.1.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "vlc-mcp-server",
+      "version": "0.1.1",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "VLC_BASE_URL",
+          "description": "Base URL of VLC's HTTP interface.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "string"
+        },
+        {
+          "name": "VLC_HTTP_PASSWORD",
+          "description": "Password configured for VLC's HTTP interface.",
+          "isRequired": false,
+          "isSecret": true,
+          "format": "string"
+        },
+        {
+          "name": "VLC_HTTP_TIMEOUT_MS",
+          "description": "HTTP request timeout in milliseconds.",
+          "isRequired": false,
+          "isSecret": false,
+          "format": "number"
+        }
+      ]
+    }
+  ]
+}
