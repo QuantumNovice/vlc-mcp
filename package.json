@@ -1,0 +1,44 @@
+{
+  "name": "vlc-mcp-server",
+  "version": "0.1.1",
+  "description": "Control VLC Media Player through the Model Context Protocol.",
+  "license": "MIT",
+  "type": "module",
+  "mcpName": "io.github.QuantumNovice/vlc-mcp",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "bin": {
+    "vlc-mcp-server": "dist/index.js"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "prepublishOnly": "npm run build",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "^2.0.0",
+    "@modelcontextprotocol/node": "^2.0.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/QuantumNovice/vlc-mcp.git"
+  },
+  "keywords": [
+    "mcp",
+    "vlc",
+    "media-player",
+    "model-context-protocol"
+  ]
+}
