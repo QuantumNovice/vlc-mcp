@@ -201,6 +201,45 @@ The probe should list the VLC tools. To set a VLC password or other environment 
 
 OpenClaw's [MCP guide](https://docs.openclaw.ai/tools/mcp) documents the UI, CLI, and config options.
 
+## Test the MCP endpoint with curl
+
+The MCP endpoint uses stdio by default. To test with curl, start the published package in its optional local HTTP mode:
+
+```powershell
+$env:MCP_TRANSPORT = "http"
+$env:MCP_HTTP_PORT = "3000"
+npx -y vlc-mcp-server
+```
+
+Leave that window running. In a second PowerShell window, initialize an MCP connection:
+
+```powershell
+curl.exe -sS -X POST http://127.0.0.1:3000/mcp `
+  -H "Content-Type: application/json" `
+  -H "Accept: application/json, text/event-stream" `
+  --data-raw '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-11-25","capabilities":{},"clientInfo":{"name":"curl-smoke-test","version":"1.0.0"}}}'
+```
+
+List the MCP tools:
+
+```powershell
+curl.exe -sS -X POST http://127.0.0.1:3000/mcp `
+  -H "Content-Type: application/json" `
+  -H "Accept: application/json, text/event-stream" `
+  --data-raw '{"jsonrpc":"2.0","id":2,"method":"tools/list"}'
+```
+
+Call VLC status (VLC must be running and its HTTP interface enabled):
+
+```powershell
+curl.exe -sS -X POST http://127.0.0.1:3000/mcp `
+  -H "Content-Type: application/json" `
+  -H "Accept: application/json, text/event-stream" `
+  --data-raw '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"vlc_get_status","arguments":{}}}'
+```
+
+The responses may be returned as Server-Sent Events (`event: message` followed by a JSON `data:` line). This HTTP mode is bound to `127.0.0.1`; it is for local checks and local clients. Stop it with **Ctrl+C**.
+
 ### 5. Troubleshoot a connection
 
 - **Connection refused or timeout:** Make sure VLC is open, the Web interface is enabled, and `VLC_BASE_URL` points to the computer running VLC.
