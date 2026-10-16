@@ -1,8 +1,32 @@
 {
   "name": "vlc-mcp",
   "version": "0.1.2",
-  "description": "Control VLC Media Player through the Model Context Protocol.",
-  "author": { "name": "QuantumNovice" },
+  "description": "VLC MCP server: control VLC Media Player from Claude, ChatGPT, Ollama and any Model Context Protocol (MCP) client. Play, pause, seek, volume and playlist tools.",
+  "author": {
+    "name": "QuantumNovice"
+  },
   "repository": "https://github.com/QuantumNovice/vlc-mcp",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "vlc",
+    "vlc-media-player",
+    "vlc-mcp",
+    "media-player",
+    "media-control",
+    "claude",
+    "claude-code",
+    "claude-plugin",
+    "claude-desktop",
+    "openai",
+    "ollama",
+    "llm-tools",
+    "ai-agent",
+    "playlist",
+    "typescript"
+  ],
+  "homepage": "https://github.com/QuantumNovice/vlc-mcp#readme",
+  "icon":"assets/vlc-icon.png"
 }

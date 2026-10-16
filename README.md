@@ -1,8 +1,8 @@
-# VLC MCP Server
+# VLC MCP Server: control VLC Media Player with Claude, ChatGPT and Ollama
 
 ![VLC media player cone icon](assets/vlc-icon.png)
 
-An MCP server that lets AI clients inspect and control VLC Media Player using its built in HTTP interface. It uses MCP `stdio` by default for local clients, with an optional loopback-only Streamable HTTP mode for curl smoke checks and local HTTP clients.
+**vlc-mcp** is a Model Context Protocol (MCP) server and Claude Code plugin that lets AI clients inspect and control VLC Media Player using its built in HTTP interface. It uses MCP `stdio` by default for local clients, with an optional loopback-only Streamable HTTP mode for curl smoke checks and local HTTP clients.
 
 The VLC cone icon is from [VideoLAN](https://images.videolan.org/images/vlc128x128.png). VLC and the cone logo are VideoLAN trademarks; this independent project is not affiliated with VideoLAN.
 

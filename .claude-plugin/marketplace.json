@@ -1,11 +1,34 @@
 {
   "name": "vlc-mcp",
-  "owner": { "name": "QuantumNovice" },
+  "owner": {
+    "name": "QuantumNovice"
+  },
   "plugins": [
     {
       "name": "vlc-mcp",
       "source": "./",
-      "description": "Control VLC Media Player through the Model Context Protocol."
+      "description": "VLC MCP server: control VLC Media Player from Claude, ChatGPT, Ollama and any Model Context Protocol (MCP) client. Play, pause, seek, volume and playlist tools.",
+      "keywords": [
+        "mcp",
+        "mcp-server",
+        "model-context-protocol",
+        "vlc",
+        "vlc-media-player",
+        "vlc-mcp",
+        "media-player",
+        "media-control",
+        "claude",
+        "claude-code",
+        "claude-plugin",
+        "claude-desktop",
+        "openai",
+        "ollama",
+        "llm-tools",
+        "ai-agent",
+        "playlist",
+        "typescript"
+      ]
     }
-  ]
+  ],
+  "description": "Claude Code plugin marketplace for the VLC MCP server."
 }

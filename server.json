@@ -1,13 +1,15 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.QuantumNovice/vlc-mcp",
-  "description": "Control VLC Media Player through MCP tools.",
+  "description": "Control VLC Media Player from any MCP client: play, pause, seek, volume, playlist.",
   "title": "VLC Media Player",
   "icons": [
     {
       "src": "https://raw.githubusercontent.com/QuantumNovice/vlc-mcp/main/assets/vlc-icon.png",
       "mimeType": "image/png",
-      "sizes": ["128x128"]
+      "sizes": [
+        "128x128"
+      ]
     }
   ],
   "repository": {
