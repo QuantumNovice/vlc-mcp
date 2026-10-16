@@ -77,6 +77,130 @@ Try these prompts:
 
 To play a specific item, first ask for the playlist, then pass the item's numeric ID to `vlc_play`. `vlc_add_media` accepts a local path or a URL that VLC supports. VLC needs permission to read the file or access the URL.
 
+## Connect from Claude Desktop
+
+Claude Desktop can launch the package over stdio. Open `%APPDATA%\Claude\claude_desktop_config.json` (create it if needed) and add this under `mcpServers`:
+
+```json
+{
+  "vlc": {
+    "command": "npx",
+    "args": ["-y", "vlc-mcp-server"],
+    "env": {
+      "VLC_BASE_URL": "http://127.0.0.1:8080"
+    }
+  }
+}
+```
+
+If the file already contains other MCP servers, add only the `vlc` entry inside `mcpServers`. Save the file and restart Claude Desktop. Open a chat and ask Claude to list the VLC playlist. For current Claude Desktop extension options, see [Anthropic's local MCP server guide](https://support.claude.com/en/articles/10949351-getting-started-with-local-mcp-servers-on-claude-desktop).
+
+## Connect from OpenAI
+
+### OpenAI Agents SDK (local stdio)
+
+For an application you run locally, install the [OpenAI Agents SDK for JavaScript](https://openai.github.io/openai-agents-js/guides/mcp/) in that application with `npm install @openai/agents`. This example starts the published VLC package as a local process:
+
+```js
+import { Agent, MCPServerStdio, run } from "@openai/agents";
+
+const server = new MCPServerStdio({
+  name: "VLC",
+  command: "npx",
+  args: ["-y", "vlc-mcp-server"],
+  env: {
+    VLC_BASE_URL: "http://127.0.0.1:8080",
+    VLC_HTTP_USERNAME: "",
+    VLC_HTTP_PASSWORD: process.env.VLC_HTTP_PASSWORD ?? ""
+  }
+});
+
+await server.connect();
+try {
+  const agent = new Agent({
+    name: "VLC assistant",
+    instructions: "Use the VLC tools to answer the user's request.",
+    mcpServers: [server]
+  });
+  const response = await run(agent, "Show the current VLC playback status.");
+  console.log(response.finalOutput);
+} finally {
+  await server.close();
+}
+```
+
+Set `OPENAI_API_KEY` before running the application. Set `VLC_HTTP_PASSWORD` only if you configured a Lua HTTP password in VLC. OpenAI's [Agents SDK MCP guide](https://openai.github.io/openai-agents-js/guides/mcp/) documents local stdio and HTTP server connections.
+
+### ChatGPT or the OpenAI Responses API
+
+ChatGPT and OpenAI hosted API requests cannot connect directly to this computer's `127.0.0.1` endpoint. To use this local VLC server from those hosted products, use [OpenAI Secure MCP Tunnel](https://developers.openai.com/api/docs/guides/secure-mcp-tunnels/). Create a tunnel in OpenAI Platform, run `tunnel-client` on this computer, and point it at this server's local stdio command or HTTP endpoint. Then add the tunnel in ChatGPT as a custom MCP server, or pass its `tunnel_id` in an OpenAI Responses API MCP tool. Tunnel setup and access depend on your OpenAI Platform and ChatGPT workspace permissions; see [OpenAI's tunnel guide](https://developers.openai.com/api/docs/guides/secure-mcp-tunnels/).
+
+## Connect from Hermes Agent
+
+Hermes Agent supports local stdio MCP servers. Register the published npm package with Hermes' MCP CLI:
+
+```powershell
+hermes mcp add vlc --command npx --args -y vlc-mcp-server
+hermes mcp test vlc
+```
+
+Start or restart Hermes with `hermes chat`, then ask it to show the VLC status. The server defaults to empty username and password. If you configured a Lua HTTP password, add it under `mcp_servers.vlc.env.VLC_HTTP_PASSWORD` in Hermes config. Hermes MCP setup and config options are documented in the [Hermes MCP guide](https://hermes-agent.nousresearch.com/docs/user-guide/features/mcp).
+
+## Use Ollama models with an MCP host
+
+Ollama runs the model; configure the MCP server in the agent or client that connects to that model. Ollama's `/api/chat` tool calling takes function definitions from the client, so it does not use this server's MCP config directly. Use an MCP-capable host such as Hermes Agent or OpenClaw, then select Ollama as that host's model provider. Ollama's [`ollama launch`](https://ollama.com/blog/improved-performance-and-model-support-with-gguf) can set up supported agent integrations:
+
+```powershell
+ollama pull qwen3
+ollama launch hermes --model qwen3
+# Or use OpenClaw:
+ollama launch openclaw --model qwen3
+```
+
+Then configure the `vlc` MCP server in Hermes or OpenClaw using the section above. Use a model with tool calling support; `ollama show qwen3` displays the model capabilities. For direct application code, your app must act as the MCP client and forward discovered MCP tools to Ollama's chat API; see [Ollama tool support](https://ollama.com/blog/tool-support).
+
+## Connect from llama.cpp
+
+Recent `llama-server` builds support MCP servers over stdio (the feature is marked experimental). Save this Cursor-style MCP config as `vlc-mcp-servers.json`:
+
+```json
+{
+  "mcpServers": {
+    "vlc": {
+      "command": "npx",
+      "args": ["-y", "vlc-mcp-server"],
+      "env": {
+        "VLC_BASE_URL": "http://127.0.0.1:8080"
+      }
+    }
+  }
+}
+```
+
+Append this option to the command you already use to start `llama-server.exe` from the directory containing the config file:
+
+```text
+--mcp-servers-config vlc-mcp-servers.json
+```
+
+If VLC has a Lua HTTP password, add `VLC_HTTP_PASSWORD` to the config's `env`. The MCP tools are then registered alongside the model server's other tools. See the [llama.cpp MCP server documentation](https://github.com/ggml-org/llama.cpp/blob/master/tools/server/README.md#mcp-servers).
+
+## Connect from OpenClaw
+
+OpenClaw supports local stdio MCP servers. Add the published package and probe its tools:
+
+```powershell
+openclaw mcp add vlc `
+  --command npx `
+  --arg -y `
+  --arg vlc-mcp-server
+openclaw mcp doctor vlc --probe
+```
+
+The probe should list the VLC tools. To set a VLC password or other environment values, edit the `vlc` server in OpenClaw's **Settings → MCP** page or its `mcp.servers` config. Keep `VLC_HTTP_PASSWORD` empty unless you set a Lua HTTP password in VLC.
+
+OpenClaw's [MCP guide](https://docs.openclaw.ai/tools/mcp) documents the UI, CLI, and config options.
+
 ### 5. Troubleshoot a connection
 
 - **Connection refused or timeout:** Make sure VLC is open, the Web interface is enabled, and `VLC_BASE_URL` points to the computer running VLC.
