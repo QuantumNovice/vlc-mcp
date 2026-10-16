@@ -1,6 +1,6 @@
 {
   "name": "vlc-mcp-server",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Control VLC Media Player through the Model Context Protocol.",
   "license": "MIT",
   "type": "module",
@@ -13,6 +13,7 @@
   },
   "files": [
     "dist/",
+    "assets/",
     "README.md",
     "LICENSE"
   ],

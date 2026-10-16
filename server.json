@@ -3,16 +3,23 @@
   "name": "io.github.QuantumNovice/vlc-mcp",
   "description": "Control VLC Media Player through MCP tools.",
   "title": "VLC Media Player",
+  "icons": [
+    {
+      "src": "https://raw.githubusercontent.com/QuantumNovice/vlc-mcp/main/assets/vlc-icon.png",
+      "mimeType": "image/png",
+      "sizes": ["128x128"]
+    }
+  ],
   "repository": {
     "url": "https://github.com/QuantumNovice/vlc-mcp",
     "source": "github"
   },
-  "version": "0.1.1",
+  "version": "0.1.2",
   "packages": [
     {
       "registryType": "npm",
       "identifier": "vlc-mcp-server",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "transport": {
         "type": "stdio"
       },
