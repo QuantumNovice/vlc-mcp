@@ -1,5 +1,7 @@
 #!/usr/bin/env node
-import { McpServer } from '@modelcontextprotocol/server';
+import { createServer as createHttpServer } from 'node:http';
+import { McpServer, createMcpHandler } from '@modelcontextprotocol/server';
+import { localhostHostValidation, localhostOriginValidation, toNodeHandler } from '@modelcontextprotocol/node';
 import { serveStdio } from '@modelcontextprotocol/server/stdio';
 import * as z from 'zod/v4';
 import { loadVlcConfig, VlcClient } from './vlc-client.js';
@@ -92,6 +94,25 @@ if (transport === 'stdio') {
   const handle = serveStdio(createMcpServer);
   process.on('SIGINT', () => { void handle.close().finally(() => process.exit(0)); });
   process.on('SIGTERM', () => { void handle.close().finally(() => process.exit(0)); });
+} else if (transport === 'http') {
+  const port = Number(process.env.MCP_HTTP_PORT ?? 3000);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    throw new Error('MCP_HTTP_PORT must be an integer from 1 to 65535.');
+  }
+
+  const nodeHandler = toNodeHandler(createMcpHandler(createMcpServer));
+  const validateHost = localhostHostValidation();
+  const validateOrigin = localhostOriginValidation();
+  const httpServer = createHttpServer((request, response) => {
+    if (!validateHost(request, response) || !validateOrigin(request, response)) return;
+    void nodeHandler(request, response);
+  });
+  httpServer.listen(port, '127.0.0.1', () => {
+    console.error(`VLC MCP HTTP endpoint listening on http://127.0.0.1:${port}/mcp`);
+  });
+  const shutdown = () => httpServer.close(() => process.exit(0));
+  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown);
 } else {
-  throw new Error('MCP_TRANSPORT must be "stdio".');
+  throw new Error('MCP_TRANSPORT must be either "stdio" or "http".');
 }
